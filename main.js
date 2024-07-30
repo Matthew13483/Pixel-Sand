@@ -133,10 +133,6 @@ function touchCanvas(x, y) {
 	let update = cell => {
 		if ((cell.v === 0 && fillMode) || (cell.v !== 0 && !fillMode)) {
 			cell.v = cell.vf = fillMode ? fill : 0;
-			/*grid.cells2U.add(cell);
-			cell.allNeighbors().map(n => n.cell).forEach(cell => {
-				grid.cells2U.add(cell);
-			});*/
 			cell.draw();
 			if (fillMode) {
 				fill += df;
@@ -229,13 +225,13 @@ function handleCancel(event) {
 }
 
 s1.onclick = () => {
-	c1.style.width = c1.style.height = '30px';
+	c1.style.width = c1.style.height = '35px';
 	c2.style.width = c2.style.height = '20px';
 	fillMode = true;
 }
 
 s2.onclick = () => {
-	c2.style.width = c2.style.height = '30px';
+	c2.style.width = c2.style.height = '35px';
 	c1.style.width = c1.style.height = '20px';
 	fillMode = false;
 }
