@@ -56,21 +56,46 @@ class Cell {
 		});
 	}
 	neighbor(dir) {
-		let n = this.neighbors.find(neighbor => neighbor.dir === dir)
+		let n = this.neighbors.find(neighbor => neighbor.dir === dir);
 		if (n) return n.cell;
 	}
 	update() {
 		if (!this.v) return;
 		
-		let down = this.neighbor(7);
+		let n7 = this.neighbor(7);
+		let n6 = this.neighbor(6);
+		let n8 = this.neighbor(8);
+		let n3 = this.neighbor(3);
+		let n5 = this.neighbor(5);
+		
+		let checks = [[{ n: n7 }], [{ n: n6, c: n3 }, { n: n8, c: n5 }]/*, [{ n: n3 }, { n: n5}]*/];
+		//checks.forEach(e => e.sort(() => Math.random() - 0.5));
+		for (let check of checks.flat()) {
+			if (check.n && check.n.vf === 0 && ((check.c && check.c.vf === 0) || !check.c)) {
+				this.vf = 0;
+				check.n.vf = this.v;
+				return [this, check.n];
+			}
+		}
+		/*let down = this.neighbor(7);
 		if (!down) return;
 		
 		if (down.v === 0) {
 			this.vf = 0;
 			down.vf = this.v;
 			return [this, down];
+		}*/
+		/*else if (this.neighbor(6) && this.neighbor(6).v === 0) {
+			this.vf = 0;
+			this.neighbor(6).vf = this.v;
+			return [this, this.neighbor(6)];
 		}
-		else {
+		else if (this.neighbor(8) && this.neighbor(8).v === 0) {
+			this.vf = 0;
+			this.neighbor(8).vf = this.v;
+			return [this, this.neighbor(8)];
+		}*/
+		/*else {
 			let ndlr = [[this.neighbor(6), this.neighbor(3)], [this.neighbor(8), this.neighbor(5)]].filter(n => n[0] && n[0].vf === 0 && n[1].vf === 0).map(n => n[0]);
 			if (ndlr.length > 0) {
 				let neig = ndlr[Math.floor(Math.random() * ndlr.length)];
@@ -78,7 +103,7 @@ class Cell {
 				neig.vf = this.v;
 				return [this, neig];
 			}
-		}
+		}*/
 	}
 	draw() {
 		let x = Math.floor(this.x * this.grid.cellWidth) + this.grid.padding;
@@ -109,11 +134,12 @@ let width = 72;
 let grid;
 
 let c = 0;
+let cn = 1;
 
 function loop() {
 	requestAnimationFrame(loop);
 
-	/*if ((c++) % 1 == 0)*/ grid.update();
+	if ((c++) % cn == 0) grid.update();
 }
 
 
